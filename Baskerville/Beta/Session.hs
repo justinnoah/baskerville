@@ -64,6 +64,11 @@ errorOut s = invalidate >> yield (ErrorPacket $ T.pack s)
 --   down the road.
 processPacket :: (Monad m) => Packet -> Conduit Packet (Session m) Packet
 
+-- | A ping or keep alive packet. Send one back after receiving one from the
+--   client. This keeps the client happy as in doing this saves the official
+--   client from a null pointer exception at login.
+processPacke (PingPacket _) = yield $ PingPacket 0
+
 -- | Login. Examine all of the bits, make sure they match, and then reply in
 --   kind.
 processPacket (LoginPacket protoVersion _ _ _ _ _ _ _) =
