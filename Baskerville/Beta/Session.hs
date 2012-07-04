@@ -46,7 +46,7 @@ yieldChan chan = do
         yieldChan chan
 
 -- | Repeatedly read in packets, process them, and output them.
---   Internally holds the state required for a protocol.
+-- Internally holds the state required for a protocol.
 worker :: Conduit Packet (Session IO) Packet
 worker = do
     s <- lift get
@@ -90,10 +90,6 @@ broadcast packet = do
 --   StateT, but doesn't require IO in order to faciliate possible refactoring
 --   down the road.
 processPacket :: (MonadIO m) => Packet -> Conduit Packet (Session m) Packet
-
--- | A ping or keep alive packet. Send one back after receiving one from the
---   client.
-processPacket (PingPacket _) = yield $ PingPacket 0
 
 -- | A ping or keep alive packet. Send one back after receiving one from the
 --   client.
